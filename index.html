@@ -1,11 +1,686 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>online-document-request-and-status-tracking-system-for-EVSU-DULAG-campus</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rain | Web Developer</title>
+    <meta name="description" content="Rain is a web developer with 3 years of experience, building modern, responsive, and user-focused digital experiences." />
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-soft: #121a2b;
+            --card: rgba(255,255,255,0.06);
+            --card-strong: #162033;
+            --text: #ebf1ff;
+            --muted: #a5b4d3;
+            --primary: #7c9cff;
+            --primary-2: #57d3ff;
+            --accent: #8ef0c7;
+            --line: rgba(255,255,255,0.08);
+            --shadow: 0 20px 45px rgba(11, 16, 32, 0.45);
+        }
+
+        * { box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(124, 156, 255, 0.26), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(87, 211, 255, 0.18), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(12px);
+            background: rgba(11, 16, 32, 0.7);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 74px;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .brand span {
+            color: var(--primary-2);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            color: var(--muted);
+            font-size: 0.96rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 0.9rem 1.5rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: #08101d;
+            box-shadow: 0 14px 30px rgba(87, 211, 255, 0.35);
+        }
+
+        .btn-secondary {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.02);
+            color: var(--text);
+        }
+
+        .hero {
+            padding: 90px 0 56px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(124, 156, 255, 0.14);
+            color: var(--primary-2);
+            border: 1px solid rgba(124, 156, 255, 0.24);
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: clamp(2.7rem, 6vw, 5rem);
+            line-height: 0.98;
+            margin: 18px 0 20px;
+            letter-spacing: -0.05em;
+        }
+
+        .highlight {
+            color: var(--primary-2);
+        }
+
+        .lead {
+            font-size: 1.08rem;
+            color: var(--muted);
+            max-width: 620px;
+            margin-bottom: 28px;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .mini-stats {
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .mini-stats div {
+            min-width: 120px;
+        }
+
+        .mini-stats strong {
+            display: block;
+            font-size: 1.7rem;
+            color: var(--text);
+        }
+
+        .mini-stats span {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .profile-card {
+            position: relative;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(124,156,255,0.04));
+            box-shadow: var(--shadow);
+        }
+
+        .photo-wrap {
+            position: relative;
+            border-radius: 22px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0d1730, #1f2d4c);
+            min-height: 540px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 88%;
+            height: 92%;
+            border-radius: 20px 20px 0 0;
+            background: linear-gradient(180deg, rgba(124,156,255,0.35), rgba(87,211,255,0.1));
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .avatar::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: linear-gradient(135deg, #f2c6b5, #d7a98f);
+            border-radius: 46% 54% 58% 42% / 45% 42% 58% 55%;
+            left: 50%;
+            top: 82px;
+            transform: translateX(-50%);
+            box-shadow: 0 18px 20px rgba(0,0,0,0.28);
+        }
+
+        .avatar::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 52%;
+            left: 0;
+            bottom: -10px;
+            background: linear-gradient(180deg, rgba(17,24,39,0.8), rgba(17,24,39,1));
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+
+        .profile-badge {
+            position: absolute;
+            right: 22px;
+            bottom: 18px;
+            background: rgba(8, 16, 29, 0.82);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-badge strong {
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        .profile-badge span {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        section {
+            padding: 44px 0;
+        }
+
+        .section-head {
+            margin-bottom: 28px;
+        }
+
+        .section-head h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin: 0 0 8px;
+            letter-spacing: -0.04em;
+        }
+
+        .section-head p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .about-grid,
+        .grid-3,
+        .contact-grid {
+            display: grid;
+            gap: 22px;
+        }
+
+        .about-grid {
+            grid-template-columns: 1.1fr 0.9fr;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-text {
+            font-size: 1.02rem;
+            color: var(--muted);
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 16px;
+        }
+
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 12px;
+            color: var(--muted);
+        }
+
+        .info-list li strong {
+            color: var(--text);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .skill-box, .project-card, .exp-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .skill-box h3, .project-card h3, .exp-card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .skill-list span {
+            background: rgba(124, 156, 255, 0.12);
+            color: var(--text);
+            border: 1px solid rgba(124,156,255,0.2);
+            padding: 0.5rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+        }
+
+        .project-card .meta {
+            color: var(--primary-2);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .project-card p, .exp-card p, .skill-box p {
+            color: var(--muted);
+            margin: 0;
+        }
+
+        .experience-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .exp-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--primary-2));
+        }
+
+        .year {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .contact-grid {
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+        }
+
+        .contact-card {
+            color: var(--muted);
+        }
+
+        .contact-link {
+            display: inline-block;
+            margin-top: 18px;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .footer {
+            padding: 26px 0 48px;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid,
+            .about-grid,
+            .grid-3,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .photo-wrap {
+                min-height: 420px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .cta-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            h1 {
+                letter-spacing: -0.04em;
+            }
+
+            .mini-stats {
+                gap: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    
+    <header class="site-header">
+        <div class="container nav">
+            <a href="#home" class="brand">Rain<span>.</span></a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#experience">Experience</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <a href="#contact" class="btn btn-primary">Hire Me</a>
+        </div>
+    </header>
+
+    <main id="home">
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="eyebrow">Web Developer</div>
+                    <h1>Hello, I’m <span class="highlight">Rain</span></h1>
+                    <p class="lead">
+                        I’m a passionate web developer with 3 years of hands-on experience building clean, responsive,
+                        and user-focused digital experiences. At 21, I enjoy turning ideas into modern websites and web apps.
+                    </p>
+
+                    <div class="cta-row">
+                        <a href="#projects" class="btn btn-primary">View My Work</a>
+                        <a href="#contact" class="btn btn-secondary">Let’s Talk</a>
+                    </div>
+
+                    <div class="mini-stats">
+                        <div>
+                            <strong>3+</strong>
+                            <span>Years Experience</span>
+                        </div>
+                        <div>
+                            <strong>21</strong>
+                            <span>Years Old</span>
+                        </div>
+                        <div>
+                            <strong>20+</strong>
+                            <span>Projects Built</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="photo-wrap" aria-label="Rain profile illustration">
+                        <div class="avatar" aria-hidden="true"></div>
+                        <div class="profile-badge">
+                            <strong>Available</strong>
+                            <span>For freelance work</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <div class="section-head">
+                    <h2>About Me</h2>
+                    <p>Designing smart, scalable solutions with a strong eye for detail.</p>
+                </div>
+
+                <div class="about-grid">
+                    <div class="card about-text">
+                        I build responsive websites and web applications that help businesses grow online. I enjoy working on
+                        front-end interfaces, user experiences, and clean code that performs well across devices. My goal is to
+                        create digital products that are both beautiful and useful.
+                    </div>
+
+                    <div class="card">
+                        <ul class="info-list">
+                            <li><span>Name</span> <strong>Rain</strong></li>
+                            <li><span>Age</span> <strong>21</strong></li>
+                            <li><span>Experience</span> <strong>3 Years</strong></li>
+                            <li><span>Specialty</span> <strong>Web Development</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Skills</h2>
+                    <p>Tools and technologies I work with to build effective digital products.</p>
+                </div>
+
+                <div class="grid-3">
+                    <div class="skill-box">
+                        <h3>Frontend</h3>
+                        <p>Creating fast and polished interfaces with modern technologies.</p>
+                        <div class="skill-list">
+                            <span>HTML</span>
+                            <span>CSS</span>
+                            <span>JavaScript</span>
+                            <span>React</span>
+                            <span>Bootstrap</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-box">
+                        <h3>Backend</h3>
+                        <p>Building logic, APIs, and data-driven features for real-world apps.</p>
+                        <div class="skill-list">
+                            <span>Node.js</span>
+                            <span>Express</span>
+                            <span>MongoDB</span>
+                            <span>PHP</span>
+                            <span>MySQL</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-box">
+                        <h3>Tools</h3>
+                        <p>Using practical tools to keep projects organized and efficient.</p>
+                        <div class="skill-list">
+                            <span>Git</span>
+                            <span>GitHub</span>
+                            <span>VS Code</span>
+                            <span>Figma</span>
+                            <span>REST API</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Experience</h2>
+                    <p>Focused on building results-driven products and smooth user experiences.</p>
+                </div>
+
+                <div class="experience-list">
+                    <div class="exp-card">
+                        <span class="year">2023 - Present</span>
+                        <h3>Junior Web Developer</h3>
+                        <p>Developing responsive websites, maintaining client-facing features, and improving website usability with a strong front-end focus.</p>
+                    </div>
+
+                    <div class="exp-card">
+                        <span class="year">2022 - 2023</span>
+                        <h3>Web Designer / Frontend Intern</h3>
+                        <p>Worked on landing pages, UI improvements, and simple web applications while learning efficient workflows and responsive design.</p>
+                    </div>
+
+                    <div class="exp-card">
+                        <span class="year">2021 - 2022</span>
+                        <h3>Freelance Project Work</h3>
+                        <p>Created website mockups and small business interfaces, helping clients present their brands effectively online.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Featured Projects</h2>
+                    <p>A few examples of the work I’ve built and contributed to.</p>
+                </div>
+
+                <div class="grid-3">
+                    <article class="project-card">
+                        <div class="meta">Business Website</div>
+                        <h3>Company Portfolio</h3>
+                        <p>Built a modern business portfolio website with smooth layouts, mobile responsiveness, and clear conversion-focused sections.</p>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="meta">Dashboard</div>
+                        <h3>Admin Dashboard</h3>
+                        <p>Developed a responsive admin dashboard interface with data sections, cards, and user-friendly navigation patterns.</p>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="meta">E-commerce</div>
+                        <h3>Online Store UI</h3>
+                        <p>Designed and coded a product-focused storefront with clean product cards and a streamlined shopping experience.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container contact-grid">
+                <div>
+                    <div class="section-head">
+                        <h2>Let’s work together</h2>
+                        <p>I’m open to freelance work, collaborations, and new opportunities.</p>
+                    </div>
+                </div>
+
+                <div class="card contact-card">
+                    <p>Email: rainwebdev@email.com</p>
+                    <p>Phone: +63 912 345 6789</p>
+                    <p>Location: Philippines</p>
+                    <a href="mailto:rainwebdev@email.com" class="contact-link">rainwebdev@email.com</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>© 2026 Rain. All rights reserved.</div>
+            <div>Built with passion for modern web experiences.</div>
+        </div>
+    </footer>
 </body>
 </html>
